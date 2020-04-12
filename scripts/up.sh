@@ -1,6 +1,8 @@
 source .env
 
-zip src/**.* target.zip
+cd src/
+
+zip -DX target *.js
 
 yc serverless function version create \
     --function-name=get-default-weather \
@@ -9,6 +11,6 @@ yc serverless function version create \
     --memory 128m \
     --execution-timeout 5s \
     --source-path ./target.zip \
-    --environment YANDEX_WEATHER_API_KEY=9e3e7a36-3484-4c1a-a29b-41df0517e835
+    --environment YANDEX_WEATHER_API_KEY=$YANDEX_WEATHER_API_KEY
 
 rm -f target.zip

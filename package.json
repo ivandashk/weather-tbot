@@ -1,0 +1,18 @@
+{
+  "name": "weather-tbot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "fstatus": "yc serverless function list",
+    "up": "./scripts/up.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivandashk/weather-tbot.git"
+  },
+  "author": "Ivan Dashkevich",
+  "homepage": "https://github.com/ivandashk/weather-tbot#readme",
+  "devDependencies": {
+    "archiver": "^3.1.1"
+  }
+}

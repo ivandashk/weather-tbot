@@ -1,4 +1,4 @@
-const { getWeatherByCoordinates } = require('./weather-queries');
+const { getWeatherByCoordinates, mapWeatherCondition } = require('./weather');
 
 exports.getCurrentWeather = async (data) => {
     const {
@@ -19,15 +19,7 @@ exports.getCurrentWeather = async (data) => {
         }
     } = await getWeatherByCoordinates(55.75396, 37.620393);
 
-    const replyText = `Сегодня в городе ${city} ${condition}\nТемпература: ${temp} °C, ощущается как ${feels_like} °C`;
-
-    const answer = JSON.stringify({
-        method: 'sendMessage',
-        chat_id: chatId, 
-        reply_to_message_id: message_id, 
-        text : replyText
-    });
-    const encodedAnswer = new Buffer.from(answer).toString('base64');
+    const replyText = `Сейчас в городе ${city} ${mapWeatherCondition(condition)}\nТемпература: ${temp} °C, ощущается как ${feels_like} °C`;
 
     return {
         'statusCode': 200,
@@ -35,6 +27,11 @@ exports.getCurrentWeather = async (data) => {
             'Content-Type': 'application/json'
         },
         'isBase64Encoded': true,
-        'body': encodedAnswer
+        'body': JSON.stringify({
+            method: 'sendMessage',
+            chat_id: chatId, 
+            reply_to_message_id: message_id, 
+            text : new Buffer.from(replyText).toString('base64')
+        })
     }
 };

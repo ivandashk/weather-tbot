@@ -1,4 +1,4 @@
-const getWeatherByCoordinates = require('./getWeatherByCoordinates');
+const { getWeatherByCoordinates } = require('./weather-queries');
 
 exports.getCurrentWeather = async (data) => {
     const {

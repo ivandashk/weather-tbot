@@ -1,7 +1,6 @@
-
 const https = require('https');
 
-exports.getCurrentWeather = async (lat, lon) => {
+exports.getWeatherByCoordinates = async (lat, lon) => {
     return new Promise((resolve, reject) => {
         const requestOptions = {
             headers: {

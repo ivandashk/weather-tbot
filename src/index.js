@@ -20,6 +20,12 @@ exports.getCurrentWeather = async (data) => {
     } = await getWeatherByCoordinates(55.75396, 37.620393);
 
     const replyText = `Сейчас в городе ${city} ${mapWeatherCondition(condition)}\nТемпература: ${temp} °C, ощущается как ${feels_like} °C`;
+    const answerBody = JSON.stringify({
+        method: 'sendMessage',
+        chat_id: chatId, 
+        reply_to_message_id: message_id, 
+        text : replyText
+    })
 
     return {
         'statusCode': 200,
@@ -27,11 +33,6 @@ exports.getCurrentWeather = async (data) => {
             'Content-Type': 'application/json'
         },
         'isBase64Encoded': true,
-        'body': JSON.stringify({
-            method: 'sendMessage',
-            chat_id: chatId, 
-            reply_to_message_id: message_id, 
-            text : new Buffer.from(replyText).toString('base64')
-        })
+        'body': new Buffer.from(answerBody).toString('base64')
     }
 };

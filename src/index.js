@@ -1,4 +1,5 @@
 const { getWeatherByCoordinates, mapWeatherCondition } = require('./weather');
+const { generateResponse } = require('./mappers');
 
 exports.getCurrentWeather = async (data) => {
     const {
@@ -6,7 +7,6 @@ exports.getCurrentWeather = async (data) => {
             chat: {
                 id: chatId
             },
-            message_id,
             text: city
         }
     } = JSON.parse(data.body);
@@ -20,19 +20,5 @@ exports.getCurrentWeather = async (data) => {
     } = await getWeatherByCoordinates(55.75396, 37.620393);
 
     const replyText = `Сейчас в городе ${city} ${mapWeatherCondition(condition)}\nТемпература: ${temp} °C, ощущается как ${feels_like} °C`;
-    const answerBody = JSON.stringify({
-        method: 'sendMessage',
-        chat_id: chatId, 
-        reply_to_message_id: message_id, 
-        text : replyText
-    })
-
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json'
-        },
-        'isBase64Encoded': true,
-        'body': new Buffer.from(answerBody).toString('base64')
-    }
-};
+    return generateResponse(200, replyText, chatId);
+}

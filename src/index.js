@@ -1,5 +1,4 @@
 const { getWeatherByName } = require('./weather');
-const { translateRuToEn } = require('./translate');
 const { generateResponse, mapTelegramInputFromApi } = require('./mappers');
 
 exports.getCurrentWeather = async (data) => {
@@ -11,11 +10,9 @@ exports.getCurrentWeather = async (data) => {
     }
     const { city, chatId } = messangerData;
 
-    return translateRuToEn(city)
-        .then(({ enCityName }) => {
-            return getWeatherByName(enCityName);
-        }).then(({ actualTemp, feelsLikeTemp }) => {
-            const replyText = `В городе ${city}\nТемпература: ${actualTemp} °C, ощущается как ${feelsLikeTemp} °C`;
+    return getWeatherByName(city)
+        .then(({ actualTemp, feelsLikeTemp, description, suggestions }) => {
+            const replyText = `${city}: ${description}.\nТемпература: ${actualTemp} °C, ощущается как ${feelsLikeTemp} °C.\n\n${suggestions}`;
             console.log(`SUCCESS: chatId: ${chatId}, город: ${city}, температура: ${actualTemp}`);
             return generateResponse(200, replyText, chatId);
         }).catch((err) => {

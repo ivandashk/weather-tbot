@@ -1,3 +1,33 @@
+const kelvToCels = (kelv) => {
+    return +(kelv - 273).toFixed();
+}
+
+exports.mapWeatherDataFromApi = (data) => {
+    const {
+        weather: [{
+            description
+        }],
+        main: {
+            temp,
+            feels_like
+        },
+        rain,
+        snow,
+        wind: {
+            speed: windSpeed
+        }
+    } = JSON.parse(data);
+
+    return {
+        actualTemp: kelvToCels(temp),
+        feelsLikeTemp: kelvToCels(feels_like),
+        description,
+        windSpeed,
+        rain,
+        snow
+    }
+}
+
 exports.mapTelegramInputFromApi = (body) => {
     const {
         message: {
@@ -29,8 +59,4 @@ exports.generateResponse = (statusCode, responseText, chatId) => {
         'isBase64Encoded': true,
         'body': new Buffer.from(answerBody).toString('base64')
     }	
-}
-
-exports.kelvToCels = (kelv) => {
-    return Math.ceil(kelv - 273);
 }

@@ -1,27 +1,24 @@
-const https = require('https');
-const { mapWeatherDataFromApi } = require('./mappers');
+const http = require('http');
+const { kelvToCels } = require('./mappers');
 
-exports.getWeatherByCoordinates = async (lat, lon) => {
+exports.getWeatherByName = (name) => {
     return new Promise((resolve, reject) => {
-        const requestOptions = {
-            headers: {
-                'X-Yandex-API-Key': process.env.YANDEX_WEATHER_API_KEY
-            }
-        }
-
-        https.get(`https://api.weather.yandex.ru/v1/forecast?lat=${lat}&lon=${lon}`, requestOptions, (res) => {
+        http.get(`http://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${process.env.OPEN_WEATHER_API_KEY}`, (res) => {
             const { statusCode } = res;
+            console.log(statusCode)
 
             if (statusCode !== 200) {
                 console.log(`Weather API request status code: ${statusCode}`)
-                reject();
+                reject('Не удалось получить погоду для города. Возможно, название города введено некорректно');
             }
 
             let rawData = '';
             res.on('data', (chunk) => { rawData += chunk; });
             res.on('end', () => {
                 try {
-                    resolve(mapWeatherDataFromApi(rawData));
+                    const parsedData = JSON.parse(rawData);
+                    const { temp, feels_like } = parsedData.main;
+                    resolve({ actualTemp: kelvToCels(temp), feelsLikeTemp: kelvToCels(feels_like) });
                 } catch (e) {
                     console.log(e)
                     reject();

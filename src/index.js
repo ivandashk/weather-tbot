@@ -1,4 +1,5 @@
-const { getWeatherByCoordinates } = require('./weather');
+const { getWeatherByName } = require('./weather');
+const { translateRuToEn } = require('./translate');
 const { generateResponse, mapTelegramInputFromApi } = require('./mappers');
 
 exports.getCurrentWeather = async (data) => {
@@ -10,11 +11,15 @@ exports.getCurrentWeather = async (data) => {
     }
     const { city, chatId } = messangerData;
 
-    const { actualTemp, feelsLikeTemp, condition } = await getWeatherByCoordinates(55.75396, 37.620393).catch(() => {
-        return generateResponse(500, `Ошибка при определении погоды. Попробуйте позднее`, chatId)
-    });
-
-    const replyText = `Сейчас в городе ${city} ${condition}\nТемпература: ${actualTemp} °C, ощущается как ${feelsLikeTemp} °C`;
-    console.log(`SUCCESS: chatId: ${chatId}, город: ${city}, температура: ${actualTemp}`);
-    return generateResponse(200, replyText, chatId);
+    return translateRuToEn(city)
+        .then(({ enCityName }) => {
+            return getWeatherByName(enCityName);
+        }).then(({ actualTemp, feelsLikeTemp }) => {
+            const replyText = `В городе ${city}\nТемпература: ${actualTemp} °C, ощущается как ${feelsLikeTemp} °C`;
+            console.log(`SUCCESS: chatId: ${chatId}, город: ${city}, температура: ${actualTemp}`);
+            return generateResponse(200, replyText, chatId);
+        }).catch((err) => {
+            const message = err ? err : `Ошибка при определении погоды. Попробуйте позднее`;
+            return generateResponse(200, message, chatId)
+        });
 }

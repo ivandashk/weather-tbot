@@ -1,8 +1,8 @@
 const http = require('http');
 const { mapWeatherDataFromApi } = require('./mappers');
 
-const getSuggestions = (avgTemp, windSpeed, humidity, rain, snow) => {
-    if (rain || humidity > 90) {
+const getSuggestions = (avgTemp, windSpeed, rain, snow) => {
+    if (rain) {
         return 'Сегодня лучше взять с собой зонт 🌧';
     } else if (snow) {
         return 'Сегодня снежно. Если взять варежки, можно будет поиграть в снежки ❄️';
@@ -39,12 +39,12 @@ exports.getWeatherByName = (name) => {
             res.on('data', (chunk) => { rawData += chunk; });
             res.on('end', () => {
                 try {
-                    const { actualTemp, feelsLikeTemp, description, windSpeed, humidity, rain, snow } = mapWeatherDataFromApi(rawData);
+                    const { actualTemp, feelsLikeTemp, description, windSpeed, rain, snow } = mapWeatherDataFromApi(rawData);
                     resolve({
                         actualTemp,
                         feelsLikeTemp,
                         description,
-                        suggestions: getSuggestions((actualTemp + feelsLikeTemp) / 2, windSpeed, humidity, rain, snow)
+                        suggestions: getSuggestions((actualTemp + feelsLikeTemp) / 2, windSpeed, rain, snow)
                     });
                 } catch (e) {
                     console.log(e)

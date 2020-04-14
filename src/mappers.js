@@ -9,8 +9,7 @@ exports.mapWeatherDataFromApi = (data) => {
         }],
         main: {
             temp,
-            feels_like,
-            humidity
+            feels_like
         },
         rain,
         snow,
@@ -24,7 +23,6 @@ exports.mapWeatherDataFromApi = (data) => {
         feelsLikeTemp: kelvToCels(feels_like),
         description,
         windSpeed,
-        humidity,
         rain,
         snow
     }

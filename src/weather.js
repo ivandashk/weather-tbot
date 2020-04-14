@@ -1,11 +1,11 @@
 const http = require('http');
 const { mapWeatherDataFromApi } = require('./mappers');
 
-const getSuggestions = (avgTemp, windSpeed, rain, snow) => {
-    if (rain) {
-        return 'Сегодня лучше взять с собой зонт.';
+const getSuggestions = (avgTemp, windSpeed, humidity, rain, snow) => {
+    if (rain || humidity > 90) {
+        return 'Сегодня лучше взять с собой зонт 🌧';
     } else if (snow) {
-        return 'Сегодня снежно. Если взять варежки, можно будет поиграть в снежки.';
+        return 'Сегодня снежно. Если взять варежки, можно будет поиграть в снежки ❄️';
     } else if (windSpeed >= 15) {
         return 'На улице ветрено. Комфортнее будет с платком или в куртке с горлом.';
     } else if (avgTemp <= -15) {
@@ -21,7 +21,7 @@ const getSuggestions = (avgTemp, windSpeed, rain, snow) => {
     } else if (avgTemp <= 30) {
         return 'Самое время для шорт и маек.';
     } else if (avgTemp > 30) {
-        return 'Сегодня жарко. Лучше держаться в тени и пить больше воды.';
+        return 'Сегодня жарко. Лучше держаться в тени и пить больше воды ☀️';
     }
 }
 
@@ -39,12 +39,12 @@ exports.getWeatherByName = (name) => {
             res.on('data', (chunk) => { rawData += chunk; });
             res.on('end', () => {
                 try {
-                    const { actualTemp, feelsLikeTemp, description, windSpeed, rain, snow } = mapWeatherDataFromApi(rawData);
+                    const { actualTemp, feelsLikeTemp, description, windSpeed, humidity, rain, snow } = mapWeatherDataFromApi(rawData);
                     resolve({
                         actualTemp,
                         feelsLikeTemp,
                         description,
-                        suggestions: getSuggestions((actualTemp + feelsLikeTemp) / 2, windSpeed, rain, snow)
+                        suggestions: getSuggestions((actualTemp + feelsLikeTemp) / 2, windSpeed, humidity, rain, snow)
                     });
                 } catch (e) {
                     console.log(e)

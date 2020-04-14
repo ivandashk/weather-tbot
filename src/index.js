@@ -9,6 +9,11 @@ exports.getCurrentWeather = async (data) => {
         return generateResponse(400, 'Неверный формат входных данных. Ожидался JSON Telegram API', undefined)
     }
     const { city, chatId } = messangerData;
+    console.log(city)
+
+    if (city.startsWith('/start')) {
+        return generateResponse(200, 'Введите название города, чтобы узнать актуальную погоду', chatId)
+    }
 
     return getWeatherByName(city)
         .then(({ actualTemp, feelsLikeTemp, description, suggestions }) => {

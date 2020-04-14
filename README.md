@@ -1,7 +1,7 @@
 # Умный сервис прогноза погоды
 
 **Уровень сложности:** Задача со звездочкой  
-**Язык программирования и технологии:** JavaScript (ES6+, Node 12), Yandex Cloud Functions **(yc CLI), OpenWeatherMap, Telegram API  
+**Язык программирования и технологии:** JavaScript (ES6+, Node 12), Yandex Cloud Functions (yc CLI), OpenWeatherMap, Telegram API  
 **Пользовательский интерфейс:** Telegram чат-бот  
 **Формат ответа:**  
 ```

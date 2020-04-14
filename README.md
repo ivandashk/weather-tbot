@@ -19,11 +19,11 @@
 Бот доступен в проде в телеграме [@YandexCloudWeatherBot](https://t.me/YandexCloudWeatherBot)  
 
 Запустить собстсвенную копию бота можно выполнив следующие шаги:
-1. Создать .env файл в корне проекта с содержимым
+1. Создать .env файл в корне проекта с содержимым. Ключ можно получить после регистрации на [OpenWeatherMap](https://openweathermap.org/api)  
 ```
 OPEN_WEATHER_API_KEY="мой API ключ"
 ```
-Ключ можно получить после регистрации на [OpenWeatherMap](https://openweathermap.org/api)  
+
 2. [Установить и настроить утилиту yc](https://cloud.yandex.ru/docs/cli/quickstart)  
 3. Создать функцию с названием `get-default-weather` на Yandex Cloud Functions  
 4. Выполнить `npm run up` из репозитория. На Yandex Cloud Functions создастся новая версия функции  
@@ -35,7 +35,8 @@ curl -F "url=https://functions.yandexcloud.net/{id функции}" https://api.
 URL по которому доступна функция в Yandex Cloud Functions можно узнать в поле `http_invoke_url`, выполнив команду 
 ```
 yc serverless function get get-default-weather
-``` 
+```
+7. Найти бота в telegram и начать использование =)
 
 ### Ссылки
 

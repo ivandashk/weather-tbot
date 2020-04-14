@@ -29,18 +29,11 @@ exports.mapWeatherDataFromApi = (data) => {
 }
 
 exports.mapTelegramInputFromApi = (body) => {
-    const {
-        message: {
-            chat: {
-                id: chatId
-            },
-            text: city
-        }
-    } = JSON.parse(body);
+    const { message, edited_message } = JSON.parse(body)
 
     return {
-        chatId,
-        city
+        chatId: message ? message.chat.id : edited_message.chat.id,
+        city: message ? message.text : edited_message.text
     }
 }
 
